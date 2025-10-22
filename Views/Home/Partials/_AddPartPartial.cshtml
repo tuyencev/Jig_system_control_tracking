@@ -1,0 +1,67 @@
+﻿
+@model Jig_system_control.Models.JigPartList
+
+<script src="~/js/select2.min.js"></script>
+<link href="~/css/select2.css" rel="stylesheet" />
+<form id="formAddPart">
+    <input type="hidden" name="JigID" value="@ViewBag.JigID" />
+
+    <div class="form-group">
+        <label>Chọn linh kiện</label>
+        <select name="SpareID" id="SpareID" class="form-control" required></select>
+    </div>
+
+    <div class="form-group">
+        <label>Số lượng</label>
+        <input type="number" name="Qty" class="form-control" required min="1" />
+    </div>
+
+    <div class="form-group">
+        <label>Ghi chú</label>
+        <textarea name="Note" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">💾 Lưu</button>
+</form>
+
+<script>
+    $(document).ready(function () {
+        // Kích hoạt Select2
+        $('#SpareID').select2({
+            theme: "bootstrap4",
+            placeholder: "Tìm linh kiện theo Code hoặc Name...",
+            minimumInputLength: 2,
+            ajax: {
+                url: '/Home/SearchSparePart',
+                dataType: 'json',
+                delay: 300,
+                data: function (params) {
+                    return { term: params.term };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item) {
+                            return {
+                                id: item.SpareID,
+                                text: item.Code + ' - ' + item.Name + (item.Maker ? ' (' + item.Maker + ')' : '')
+                            };
+                        })
+                    };
+                }
+            }
+        });
+    });
+
+    // Submit form
+    $("#formAddPart").submit(function (e) {
+        e.preventDefault();
+        $.post("/Home/AddPart", $(this).serialize(), function (res) {
+            if (res.success) {
+                $("#modalAction").modal("hide");
+                $("#partTable").append(res.html);
+            } else {
+                alert(res.message);
+            }
+        });
+    });
+</script>

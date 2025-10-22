@@ -1,0 +1,50 @@
+﻿
+@model Jig_system_control.Models.JigDocument
+
+<form id="formAddDoc" enctype="multipart/form-data">
+    <input type="hidden" name="JigID" value="@ViewBag.JigID" />
+
+    <div class="form-group">
+        <label>Loại tài liệu</label>
+        <input type="text" name="DocType" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>File</label>
+        <input type="file" name="File" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Version</label>
+        <input type="text" name="Version" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Ghi chú</label>
+        <textarea name="Note" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">💾 Lưu</button>
+</form>
+
+<script>
+$("#formAddDoc").submit(function (e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    $.ajax({
+        url: '/Home/AddDocument',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            if (res.success) {
+                $("#modalAction").modal("hide");
+                $("#docTable").append(res.html);
+            } else {
+                alert(res.message);
+            }
+        }
+    });
+});
+</script>

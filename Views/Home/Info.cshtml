@@ -1,0 +1,242 @@
+﻿
+
+@model Jig_system_control.Models.Jig
+
+
+@{
+    ViewBag.Title = "Jig Info";
+}
+
+<script src="~/js/jquery.min.js"></script>
+<link href="~/css/select2.css" rel="stylesheet" />
+<script src="~/js/select2.min.js"></script>
+
+
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-6 col-lg-4">
+            <select name="searchForm" id="searchForm" class="form-control w-75 mx-auto"></select>
+        </div>
+    </div>
+
+    @if (Model != null)
+    {
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+
+                <h3 class="mb-4">Thông tin Jig: <span class="text-primary">@Model.JigCode</span></h3>
+
+                <ul class="nav nav-tabs" id="jigTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab">Thông tin chung</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="doc-tab" data-toggle="tab" href="#doc" role="tab">Tài liệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="draw-tab" data-toggle="tab" href="#draw" role="tab">Bản vẽ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="part-tab" data-toggle="tab" href="#part" role="tab">Linh kiện</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content mt-3">
+                    <!-- TAB THÔNG TIN CHUNG -->
+                    <div class="tab-pane fade show active" id="info" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img src="@Model.Image" class="img-thumbnail" style="max-width: 100%;" alt="Jig Image" />
+                            </div>
+                            <div class="col-md-8">
+                                <table class="table table-bordered">
+                                    <tr><th>Mã Jig</th><td>@Model.JigCode</td></tr>
+                                    <tr><th>Tên Jig</th><td>@Model.JigName</td></tr>
+                                    <tr><th>Model</th><td>@Model.Model</td></tr>
+                                    <tr><th>Type</th><td>@Model.Type</td></tr>
+                                    <tr><th>Range</th><td>@Model.Range</td></tr>
+                                    <tr><th>Version</th><td>@Model.Version</td></tr>
+                                    <tr><th>Ghi chú</th><td>@Model.Note</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB TÀI LIỆU -->
+                    <div class="tab-pane fade" id="doc" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5>Tài liệu đính kèm</h5>
+
+                        </div>
+
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Loại tài liệu</th>
+                                    <th>Tên file</th>
+                                    <th>Phiên bản</th>
+                                    <th>Ghi chú</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="docTable">
+                                @foreach (var doc in Model.JigDocument)
+                                {
+                                    <tr id="doc_@doc.DocID">
+                                        <td>@doc.DocType</td>
+                                        <td><a href="@doc.FilePath" target="_blank">@doc.FileName</a></td>
+                                        <td>@doc.Version</td>
+                                        <td>@doc.Note</td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- TAB BẢN VẼ -->
+                    <div class="tab-pane fade" id="draw" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5>Bản vẽ Jig</h5>
+                        </div>
+
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Tên bản vẽ</th>
+                                    <th>Phiên bản</th>
+                                    <th>Ghi chú</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="drawTable">
+                                @foreach (var draw in Model.JigDrawing)
+                                {
+                                    <tr id="draw_@draw.DrawingID">
+                                        <td><a href="@draw.FilePath" target="_blank">@draw.FileName</a></td>
+                                        <td>@draw.Version</td>
+                                        <td>@draw.Note</td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- TAB LINH KIỆN -->
+                    <div class="tab-pane fade" id="part" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5>Danh sách linh kiện</h5>
+
+                        </div>
+
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Tên linh kiện</th>
+                                    <th>Maker</th>
+                                    <th>Số lượng</th>
+                                    <th>Ghi chú</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="partTable">
+                                <p>Số linh kiện: @Model.JigPartList.Count()</p>
+
+                                @foreach (var p in ViewBag.PartDisplay)
+                                {
+                                    <tr id="part_@p.PartID">
+                                        <td>@p.Code</td>
+                                        <td>@p.Name</td>
+                                        <td>@p.Maker</td>
+                                        <td>@p.Qty</td>
+                                        <td>@p.Note</td>
+
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+<div class="row justify-content-center my-4">
+    <div class="col-auto">
+        <button type="button" class="btn btn-secondary" onclick="goBack()">
+            <i class="fas fa-arrow-left mr-2"></i> Trở về
+        </button>
+    </div>
+    <div class="col-auto">
+        <button type="button" class="btn btn-primary" onclick="editJig()">
+            <i class="fas fa-edit mr-2"></i> Chỉnh sửa
+        </button>
+    </div>
+</div>
+</div>
+
+
+<script>
+
+            // Khởi tạo select2 với ajax
+            $('#searchForm').select2({
+                theme: "bootstrap4",
+                placeholder: "Tìm Jig theo Code hoặc Name...",
+                minimumInputLength: 2,
+                ajax: {
+                    url: '/Home/GetSuggestions',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return { query: params.term };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.JigID,
+                                    text: item.JigCode + ' - ' + item.JigName + ' (' + item.Model + ')'
+                                };
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+    $('#searchForm').on('select2:select', function (e) {
+        const jigId = e.params.data.id;
+        console.log('Selected JigID:', jigId); // debug
+        if (jigId)
+            window.location.href = '/Home/Detail/' + jigId;
+        else
+            alert('Không lấy được ID Jig!');
+    });
+</script>
+
+<script>
+    const jigId = @(Model != null ? Model.JigID : 0);
+
+    function goBack() {
+        // Quay lại danh sách jig (hoặc trang trước)
+        if (document.referrer) {
+            window.history.back();
+        } else {
+            window.location.href = '/Home/Index'; // hoặc route danh sách jig
+        }
+    }
+
+    function editJig() {
+        if (jigId > 0) {
+            window.location.href = '/Home/Detail/' + jigId;
+        } else {
+            alert('Không có Jig để chỉnh sửa. Vui lòng tìm Jig trước!');
+        }
+    }
+</script>

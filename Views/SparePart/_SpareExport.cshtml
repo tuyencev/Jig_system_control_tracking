@@ -1,0 +1,93 @@
+﻿
+<div class="card">
+    <div class="card-header"><h5>Tottal List</h5></div>
+    <div class="card-body">
+        <table id="tblall" class="table table-striped w-100">
+            <thead>
+                <tr>
+                    <th>Spare ID</th>
+                    <th>Part Code</th>
+                    <th>Part Name</th>
+                    <th>Maker</th>
+                    <th>CurrentQty</th>
+                    <th>
+                        Location
+                    </th>
+                    <th> Remark </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        const tbl = $('#tblall').DataTable({
+            ajax: '/SparePart/GetAlllist',
+            columns: [
+                { data: 'SpareID' },
+                { data: 'Code' },
+                { data: 'Name' },
+                { data: 'Maker' },
+                { data: 'CurrentQty' },
+                { data: 'Location' },
+                { data: 'Remark' },
+                {
+                    data: null,
+                    render: d => `<button class="btn btn-sm btn-primary btnsudung" data-id="${d.SpareID}">Lấy sử dụng</button>`
+                }
+            ]
+        });
+
+        $('#tblall').on('click', '.btnsudung', async function () {
+            const id = $(this).data('id');
+            const $btn = $(this);
+
+            let qty = prompt(`Nhập số lượng Lấy`);
+
+            if (qty === null) return; // Cancel
+            qty = parseInt(qty);
+
+
+            $.ajax({
+                url: '/SparePart/UseSpare',
+                type: 'POST',
+                data: {
+                    spareId: id,
+                    usedQty:qty
+
+                },
+                success: function (res) {
+
+                    if (res.success) {
+
+                        tbl.ajax.reload();
+                        showNotification('Đã lấy thành công!', 'success');
+                    } else {
+                        showNotification('Lỗi: ' + res.message, 'error');
+                        $btn.prop('disabled', false).text('Approve');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showNotification('Không thể kết nối server: ' + error, 'error');
+                    $btn.prop('disabled', false).text('Approve');
+                }
+            });
+        });
+        function showNotification(message, type) {
+            // Sử dụng toastr nếu có, hoặc dùng alert
+            if (typeof toastr !== 'undefined') {
+                if (type === 'success') {
+                    toastr.success(message);
+                } else {
+                    toastr.error(message);
+                }
+            } else {
+                alert(message);
+            }
+        }
+    });
+ 
+
+</script>

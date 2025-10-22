@@ -1,0 +1,167 @@
+﻿<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Request List</h5>
+
+    </div>
+    <div class="card-body">
+        <table id="tblRequest" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Part Code</th>
+                    <th>Name</th>
+                    <th>Qty request</th>
+                    <th>Qty Stock</th>
+                    <th>RequestedBy</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <button class="btn-danger"></button>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        var table = $('#tblRequest').DataTable({
+            ajax: '/SparePart/GetRequestList',
+            columns: [
+                { data: 'RequestID' },
+                { data: 'Code' },
+                { data: 'Name' },
+                { data: 'QtyRequested' },
+                { data: 'CurrentQty' },
+                { data: 'RequestedBy' },
+                {
+                    data: 'RequestDate',
+
+                    render: function (data) {
+                        if (!data) return '';
+                        var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
+                        var date = new Date(timestamp);
+                        return date.toLocaleDateString('vi-VN', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    }
+                },
+                
+                { data: 'Status' },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<button class="btn btn-sm btn-primary btnApprove" data-id="${data.RequestID}">Approve</button>
+                        <button class="btn btn-sm btn-danger btnCancel" data-id="${data.RequestID}">Cancel</button>`;
+                    }
+                }
+            ]
+        });
+
+        // Xử lý khi nhấn Approve
+         $('#tblRequest').on('click', '.btnApprove', function () {
+                const id = $(this).data('id');
+                const $btn = $(this);
+
+             const rowData = $('#tblRequest').DataTable().row($btn.parents('tr')).data();
+             const maxQty = rowData.QtyRequested;
+
+             // Hiển thị prompt để nhập số lượng duyệt
+             let qty = prompt(`Nhập số lượng Approved (tối đa ${maxQty}):`, maxQty);
+             if (qty === null) return; // Cancel
+             qty = parseInt(qty);
+
+             if (isNaN(qty) || qty <= 0 || qty > maxQty) {
+                 toastr.warning("Số lượng không hợp lệ!");
+                 return;
+             }
+
+ 
+     $btn.prop('disabled', true).text('Đang duyệt...');
+     console.log('Sending approve request for ID:', id); // Debug
+
+        $.ajax({
+            url: '/SparePart/ApproveRequest',
+            type: 'POST',
+            data: {
+                id_request: id,
+                approvedQty: qty,
+                },
+            success: function (res) {
+                console.log('Response received:', res); // Debug response
+                if (res.success) {
+                    console.log('Success - reloading table...');
+                    // Refresh DataTable với biến 'table' đã khai báo
+                    table.ajax.reload();
+
+                    $btn.prop('disabled', false).text('Approve');
+                    // Hiển thị thông báo đẹp hơn
+                    showNotification('Đã duyệt thành công!', 'success');
+                } else {
+                    showNotification('Lỗi: ' + res.message, 'error');
+                    $btn.prop('disabled', false).text('Approve');
+                }
+            },
+            error: function (xhr, status, error) {
+                showNotification('Không thể kết nối server: ' + error, 'error');
+                $btn.prop('disabled', false).text('Approve');
+            }
+        });
+         });
+
+        $('#tblRequest').on('click', '.btnCancel', function () {
+            const id = $(this).data('id');
+            const $btn = $(this);
+            let comment = prompt(`Bạn muốn cancel với lý do:`);
+            if (comment==null) {
+                return;
+            }
+
+            $.ajax({
+                url: '/SparePart/CancelRequest',
+                type: 'POST',
+                data: {
+                    id_request: id,
+                    comment_request: comment,
+                },
+                success: function (res) {
+                 
+                    if (res.success) {
+                        table.ajax.reload();
+                     
+                        showNotification('Đã cancel thành công!', 'success');
+                    } else {
+                        showNotification('Lỗi: ' + res.message, 'error');
+                        $btn.prop('disabled', false).text('Approve');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showNotification('Không thể kết nối server: ' + error, 'error');
+                    $btn.prop('disabled', false).text('Approve');
+                }
+            });
+
+        });
+
+
+
+    // Hàm hiển thị thông báo
+    function showNotification(message, type) {
+        // Sử dụng toastr nếu có, hoặc dùng alert
+        if (typeof toastr !== 'undefined') {
+            if (type === 'success') {
+                toastr.success(message);
+            } else {
+                toastr.error(message);
+            }
+        } else {
+            alert(message);
+        }
+        }
+});
+</script>

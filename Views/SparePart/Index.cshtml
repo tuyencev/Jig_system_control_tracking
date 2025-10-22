@@ -1,0 +1,131 @@
+﻿@{
+    ViewBag.Title = "Spare Part Dashboard";
+    Layout = "~/Views/Shared/_AfterLogin.cshtml";
+}
+<link href="~/css/toastr.min.css" rel="stylesheet" />
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h3>Spare Part Dashboard</h3>
+   
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center border-primary">
+            <div class="card-body">
+                <h5>Requests chờ confirm</h5>
+                <h2 id="reqCount">@ViewBag.reqCount</h2>
+                <button class="btn btn-sm btn-outline-primary view-more" data-tab="request">View more</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center border-success">
+            <div class="card-body">
+                <h5>List chờ hàng về</h5>
+                <h2 id="approveCount"> @ViewBag.approveCount</h2>
+                <button class="btn btn-sm btn-outline-success view-more" data-tab="approve">View more</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center border-warning">
+            <div class="card-body">
+                <h5>Lits Out Stock</h5>
+                <h2 id="importCount">@ViewBag.Outstock</h2>
+                <button class="btn btn-sm btn-outline-warning view-more" data-tab="outstock">View more</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center border-danger">
+            <div class="card-body">
+                <h5>
+                    Total List spare part
+                </h5>
+                <h2 id="exportCount">@ViewBag.Totallist</h2>
+                <button class="btn btn-sm btn-outline-danger view-more" data-tab="alllist">View more</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <button class="btn btn-primary" onclick="$('#modalRequest').modal('show')">
+        <i class="fe fe-plus"></i> Tạo Request
+    </button>
+    <button class="btn btn-warning" onclick="$('#modalAddSpare').modal('show')">
+        <i class="fe fe-plus"></i> Thêm Linh kiện
+    </button>
+    <button class="btn btn-sm btn-outline-danger view-more" data-tab="history">Lịch sử kho</button>
+</div>
+
+<!-- Tabs -->
+<ul class="nav nav-tabs mb-3" id="spareTabs" role="tablist">
+    <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-request">Request</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-approve">Approve</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-outstock">Outstock</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-alllist">List All</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-history">History</a></li>
+</ul>
+
+
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="tab-request"></div>
+    <div class="tab-pane fade" id="tab-approve">Approve</div>
+    <div class="tab-pane fade" id="tab-outstock">Outstock</div>
+    <div class="tab-pane fade" id="tab-alllist">List All</div>
+    <div class="tab-pane fade" id="tab-history">History</div>
+</div>
+
+@section Scripts {
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/toastr.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function loadTab(tabName, targetDiv) {
+                $.ajax({
+                    url: '/SparePart/LoadTabPartial',
+                    type: 'GET',
+                    data: { tab: tabName },
+                    beforeSend: function () {
+                        targetDiv.html("<div class='p-3 text-center text-muted'>Đang tải...</div>");
+                    },
+                    success: function (html) {
+                        targetDiv.html(html);
+                        targetDiv.data("loaded", true);
+                    },
+                    error: function () {
+                        targetDiv.html("<div class='text-danger p-3'>Lỗi tải dữ liệu tab.</div>");
+                    }
+                });
+            }
+
+            // Khi đổi tab
+            $('#spareTabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                let tabId = $(e.target).attr("href");  // ví dụ: #tab-request
+                let targetDiv = $(tabId);
+                let tabName = tabId.replace("#tab-", ""); // "request", "approve", ...
+
+                if (!targetDiv.data("loaded")) {
+                    loadTab(tabName, targetDiv);
+                }
+            });
+
+            // Khi click vào nút "View more"
+            $(".view-more").click(function () {
+                let tab = $(this).data("tab");
+                $('#spareTabs a[href="#tab-' + tab + '"]').tab('show');
+            });
+
+            // 🔹 Tự động mở tab "request" và load dữ liệu khi trang vừa load
+            let firstTab = $('#spareTabs a[href="#tab-request"]');
+            firstTab.tab('show');
+
+            let firstDiv = $('#tab-request');
+            if (!firstDiv.data("loaded")) {
+                loadTab("request", firstDiv);
+            }
+        });
+    </script>
+}
+

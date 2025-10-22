@@ -1,0 +1,118 @@
+﻿<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5>Approved Requests</h5>
+  
+    </div>
+    <div class="card-body">
+        <table id="tblApprove" class="table table-bordered w-100">
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Spare ID</th>
+                    <th>Part Code</th>
+                    <th>Part Name</th>
+                    <th>ApprovedBy</th>
+                    <th>ApprovedDate</th>
+                    <th>Qty Requested</th>
+                    <th>Qty Receviced</th>
+                    <th>Qty Pending</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<script>
+ $(document).ready(function () {
+     var table = $('#tblApprove').DataTable({
+        ajax: '/SparePart/GetApproveList',
+         columns: [
+             { data: 'RequestID' },
+            { data: 'SpareID' },
+            { data: 'Code' },
+            { data: 'Name' },
+            { data: 'ApprovedBy' },
+             {
+                 data: 'ApprovedDate',
+                 render: function (data) {
+                     if (!data) return '';
+                     var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
+                     var date = new Date(timestamp);
+                     return date.toLocaleDateString('vi-VN', {
+                         year: 'numeric',
+                         month: '2-digit',
+                         day: '2-digit',
+                         hour: '2-digit',
+                         minute: '2-digit'
+                     });
+                 }
+             },
+             { data: 'ApprovedQty' },
+             { data: 'QtyReceived' },
+             { data: 'QtyPending' },
+             { data: 'Status' },
+
+            {
+                data: null,
+                render: d => `<button class="btn btn-sm btn-warning btnImport" data-id="${d.SpareID}">Nhận Hàng</button>
+                                 <button class="btn btn-sm btn-info btnviewmore" data-id="${d.SpareID}">Xem thêm</button>`
+            }
+        ]
+     });
+
+    $('#tblApprove').on('click', '.btnImport', function () {
+       const id = $(this).data('id');
+       const $btn = $(this);
+
+        let qty = prompt(`Nhập số lượng nhận`);
+        if (qty === null) return; // Cancel
+        qty = parseInt(qty);
+
+       $.ajax({
+           url: '/SparePart/CreateImport',
+           type: 'POST',
+           data: {
+               SpareID: id,
+               Qyt:qty},
+           headers: {
+               'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+           },
+           success: function (res) {
+             
+               if (res.success) {
+             
+                   table.ajax.reload();
+
+
+                   showNotification('Đã nhận hàng thành công!', 'success');
+               } else {
+                   showNotification('Lỗi: ' + res.message, 'error');
+                   $btn.prop('disabled', false).text('Đã nhận hàng');
+               }
+           },
+           error: function (xhr, status, error) {
+               showNotification('Không thể kết nối server: ' + error, 'error');
+               $btn.prop('disabled', false).text('Nhận Hàng');
+           }
+       });
+   });
+
+   // Hàm hiển thị thông báo
+   function showNotification(message, type) {
+       // Sử dụng toastr nếu có, hoặc dùng alert
+       if (typeof toastr !== 'undefined') {
+           if (type === 'success') {
+               toastr.success(message);
+           } else {
+               toastr.error(message);
+           }
+       } else {
+           alert(message);
+       }
+     }
+ });
+
+</script>
+

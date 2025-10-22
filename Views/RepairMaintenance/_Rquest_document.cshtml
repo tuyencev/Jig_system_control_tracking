@@ -1,0 +1,83 @@
+﻿
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Request Document</h5>
+
+    </div>
+    <div class="card-body">
+        <table id="tblRequestDoc" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Jig code</th>
+                    <th>Jig Name</th>
+                    <th>Model</th>
+                    <th>Version</th>
+                    <th>Description</th>
+                    <th>Request by</th>
+                    <th>Request Date</th>
+                    <th>Attach file</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <button class="btn-danger"></button>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        var table = $('#tblRequestDoc').DataTable({
+            ajax: '/RepairMaintenance/GetRequestDoc',
+            columns: [
+                { data: 'RequestID' },
+                { data: 'JigCode' },
+                { data: 'JigName' },
+                { data: 'Model' },
+                { data: 'Version' },
+                { data: 'Description' },
+                { data: 'requestby' },
+
+                {
+                    data: 'RequestDate',
+
+                    render: function (data) {
+                        if (!data) return '';
+                        var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
+                        var date = new Date(timestamp);
+                        return date.toLocaleDateString('vi-VN', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    }
+                },
+                { data: 'FilePath' },  
+                { data: 'Status' },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<a href="/RepairMaintenance/RepairDetail?id=${data.RepairID}"
+           class="btn btn-sm btn-primary">
+           <i class="fe fe-tool"></i> Approved
+        </a>`;
+                    }
+                }
+            ]
+        });
+
+        // Xử lý khi nhấn Approve
+        $('#tblRepair').on('click', '.btnApprove', function () {
+            const id = $(this).data('id');
+            const $btn = $(this);
+
+        });
+
+    });
+</script>

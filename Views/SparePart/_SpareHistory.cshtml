@@ -1,0 +1,56 @@
+﻿
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h5>History</h5>
+
+    </div>
+    <div class="card-body">
+        <table id="tblhis" class="table table-bordered w-100">
+            <thead>
+                <tr>
+                    <th>Trans ID</th>
+                    <th>Part Code</th>
+                    <th>Part Name</th>
+                    <th>Trạng Thái</th>
+                    <th>Qty</th>
+                    <th>CreateBy</th>
+                    <th>CreateDate</th>
+                  
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var table = $('#tblhis').DataTable({
+            ajax: '/SparePart/GetHistory',
+            columns: [
+                { data: 'TranID' },
+                { data: 'Code' },
+                { data: 'Name' },
+                { data: 'Type' },
+                { data: 'Qty' },
+
+                { data: 'CreatedBy' },
+                {
+                    data: 'CreatedDate',
+                    render: function (data) {
+                        if (!data) return '';
+                        var timestamp = parseInt(data.replace(/\/Date\((\d+)\)\//, '$1'));
+                        var date = new Date(timestamp);
+                        return date.toLocaleDateString('vi-VN', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    }
+                }
+            ]
+
+        });
+    });
+</script>

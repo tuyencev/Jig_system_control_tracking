@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="de026f8ecd02421f89bdba5003440725" Name="Diagram1" ZoomLevel="83">
+        <EntityTypeShape EntityType="Jig_system_controlModel.Jig" Width="1.5" PointX="1.5" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.JigDocument" Width="1.5" PointX="3.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.JigDrawing" Width="1.5" PointX="1.25" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.JigMaintainChecklist" Width="1.5" PointX="7.875" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.JigMaintainHistory" Width="1.5" PointX="10.875" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.JigPartList" Width="1.5" PointX="2" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.JigRepairHistory" Width="1.5" PointX="3.625" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.JigRequest" Width="1.5" PointX="8.125" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.MaintainItem" Width="1.5" PointX="10.625" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.MaintainSpareUsage" Width="1.5" PointX="14" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.RepairSpareUsage" Width="1.5" PointX="4.25" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.UserAccount" Width="1.5" PointX="5.625" PointY="9.5" IsExpanded="true" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_Jig_CreatedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_JigDocument_Jig" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_JigDrawing_Jig" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_JigMaintain_Jig" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_JigPartList_Jig" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_JigRepair_Jig" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_JigRequest_Jig" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_Checklist_Item" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_Checklist_Maintain" ManuallyRouted="false" >
+        </AssociationConnector>
+        <AssociationConnector Association="Jig_system_controlModel.FK_Checklist_User" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_JigMaintain_User" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_MaintainSpare_Maintain" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_JigRepair_User" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_RepairSpare_Repair" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_JigRequest_Approver" ManuallyRouted="false" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_JigRequest_By" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.SparePartApprovals" Width="2.125" PointX="17.875" PointY="17.125" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.SparePartReceiptDetails" Width="2.25" PointX="19.875" PointY="13.625" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.SparePartReceipts" Width="1.5" PointX="18.625" PointY="9.875" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.SparePartRequests" Width="2" PointX="15.625" PointY="13.25" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.SparePartStocks" Width="1.5" PointX="13.375" PointY="12.625" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.SparePartTransactions" Width="1.5" PointX="13.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.SparePartUse" Width="1.5" PointX="17.875" PointY="13.5" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.sysdiagrams" Width="1.5" PointX="13.375" PointY="9.75" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.vw_SparePart_PendingRequests" Width="1.875" PointX="7.5" PointY="14.875" />
+        <EntityTypeShape EntityType="Jig_system_controlModel.vw_SparePart_WaitingRequestStatus" Width="1.5" PointX="15.375" PointY="0.75" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_JigPartList_Spare1" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_MaintainSpare_Spare1" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_RepairSpare_Spare1" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_App_Request" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_Rd_Receipt" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_Rd_Request" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_Rd_Spare" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_Req_Spare" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_Use_Request" />
+        <AssociationConnector Association="Jig_system_controlModel.FK_Use_Spare" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

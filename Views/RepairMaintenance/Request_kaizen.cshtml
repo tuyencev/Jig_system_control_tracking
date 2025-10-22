@@ -1,0 +1,59 @@
+﻿
+
+
+@model Jig_system_control.Models.Jig
+
+<form id="formrequestDoc" enctype="multipart/form-data">
+    <input type="hidden" name="JigID" value="@ViewBag.JigID" />
+
+    <div class="form-group">
+        <label>Loại request</label>
+        <input type="text" name="type" value="Document" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Nội dung request</label>
+        <textarea name="Note" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>File đính kèm</label>
+        <input type="file" name="File" class="form-control" required />
+    </div>
+
+    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <button id="btnSendDesignRequest" class="btn btn-primary">Send Request</button>
+</form>
+<script>
+    $("#formrequestDoc").submit(function (e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    $.ajax({
+        url: '/RepairMaintenance/SendRequest',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            if (res.success) {
+                $("#modalrequest").modal("hide");
+                showNotification('Đã gửi thành công!', 'success');
+            } else {
+                alert(res.message);
+            }
+        }
+    });
+    });
+    function showNotification(message, type) {
+        // Sử dụng toastr nếu có, hoặc dùng alert
+        if (typeof toastr !== 'undefined') {
+            if (type === 'success') {
+                toastr.success(message);
+            } else {
+                toastr.error(message);
+            }
+        } else {
+            alert(message);
+        }
+    }
+</script>

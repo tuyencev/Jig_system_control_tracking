@@ -1,0 +1,841 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Jig_system_controlModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Jig">
+    <Key>
+      <PropertyRef Name="JigID" />
+    </Key>
+    <Property Name="JigID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="JigCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="JigName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Version" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Range" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+    <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="UserAccount" Relationship="Self.FK_Jig_CreatedBy" FromRole="Jig" ToRole="UserAccount" />
+    <NavigationProperty Name="JigDocument" Relationship="Self.FK_JigDocument_Jig" FromRole="Jig" ToRole="JigDocument" />
+    <NavigationProperty Name="JigDrawing" Relationship="Self.FK_JigDrawing_Jig" FromRole="Jig" ToRole="JigDrawing" />
+    <NavigationProperty Name="JigMaintainHistory" Relationship="Self.FK_JigMaintain_Jig" FromRole="Jig" ToRole="JigMaintainHistory" />
+    <NavigationProperty Name="JigPartList" Relationship="Self.FK_JigPartList_Jig" FromRole="Jig" ToRole="JigPartList" />
+    <NavigationProperty Name="JigRepairHistory" Relationship="Self.FK_JigRepair_Jig" FromRole="Jig" ToRole="JigRepairHistory" />
+    <NavigationProperty Name="JigRequest" Relationship="Self.FK_JigRequest_Jig" FromRole="Jig" ToRole="JigRequest" />
+    <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="JigDocument">
+    <Key>
+      <PropertyRef Name="DocID" />
+    </Key>
+    <Property Name="DocID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="JigID" Type="Int32" Nullable="false" />
+    <Property Name="DocType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="FileName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="FilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Version" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Note" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="UploadDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Jig" Relationship="Self.FK_JigDocument_Jig" FromRole="JigDocument" ToRole="Jig" />
+  </EntityType>
+  <EntityType Name="JigDrawing">
+    <Key>
+      <PropertyRef Name="DrawingID" />
+    </Key>
+    <Property Name="DrawingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="JigID" Type="Int32" Nullable="false" />
+    <Property Name="FileName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="FilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Version" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Note" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Jig" Relationship="Self.FK_JigDrawing_Jig" FromRole="JigDrawing" ToRole="Jig" />
+    <Property Name="DrawingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="UploadDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="JigMaintainChecklist">
+    <Key>
+      <PropertyRef Name="ChecklistID" />
+    </Key>
+    <Property Name="ChecklistID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaintainID" Type="Int32" Nullable="false" />
+    <Property Name="MaintainItemID" Type="Int32" Nullable="false" />
+    <Property Name="Result" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Remark" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="SpareUsed" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="UpdatedBy" Type="Int32" />
+    <NavigationProperty Name="MaintainItem" Relationship="Self.FK_Checklist_Item" FromRole="JigMaintainChecklist" ToRole="MaintainItem" />
+    <NavigationProperty Name="JigMaintainHistory" Relationship="Self.FK_Checklist_Maintain" FromRole="JigMaintainChecklist" ToRole="JigMaintainHistory" />
+    <NavigationProperty Name="UserAccount" Relationship="Self.FK_Checklist_User" FromRole="JigMaintainChecklist" ToRole="UserAccount" />
+  </EntityType>
+  <EntityType Name="JigMaintainHistory">
+    <Key>
+      <PropertyRef Name="MaintainID" />
+    </Key>
+    <Property Name="MaintainID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="JigID" Type="Int32" Nullable="false" />
+    <Property Name="MaintainDate" Type="DateTime" Precision="3" />
+    <Property Name="Maintainer" Type="Int32" />
+    <Property Name="Result" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NextMaintainDate" Type="DateTime" Precision="3" />
+    <Property Name="Remark" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Jig" Relationship="Self.FK_JigMaintain_Jig" FromRole="JigMaintainHistory" ToRole="Jig" />
+    <NavigationProperty Name="JigMaintainChecklist" Relationship="Self.FK_Checklist_Maintain" FromRole="JigMaintainHistory" ToRole="JigMaintainChecklist" />
+    <NavigationProperty Name="UserAccount" Relationship="Self.FK_JigMaintain_User" FromRole="JigMaintainHistory" ToRole="UserAccount" />
+    <NavigationProperty Name="MaintainSpareUsage" Relationship="Self.FK_MaintainSpare_Maintain" FromRole="JigMaintainHistory" ToRole="MaintainSpareUsage" />
+  </EntityType>
+  <EntityType Name="JigPartList">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="JigID" Type="Int32" Nullable="false" />
+    <Property Name="SpareID" Type="Int32" Nullable="false" />
+    <Property Name="Qty" Type="Int32" />
+    <Property Name="Note" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Jig" Relationship="Self.FK_JigPartList_Jig" FromRole="JigPartList" ToRole="Jig" />
+    <NavigationProperty Name="SparePartStocks" Relationship="Jig_system_controlModel.FK_JigPartList_Spare1" FromRole="JigPartList" ToRole="SparePartStocks" />
+  </EntityType>
+  <EntityType Name="JigRepairHistory">
+    <Key>
+      <PropertyRef Name="RepairID" />
+    </Key>
+    <Property Name="RepairID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="JigID" Type="Int32" Nullable="false" />
+    <Property Name="RepairDate" Type="DateTime" Precision="3" />
+    <Property Name="Problem" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Action" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Technician" Type="Int32" />
+    <Property Name="FilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Remark" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Jig" Relationship="Self.FK_JigRepair_Jig" FromRole="JigRepairHistory" ToRole="Jig" />
+    <NavigationProperty Name="UserAccount" Relationship="Self.FK_JigRepair_User" FromRole="JigRepairHistory" ToRole="UserAccount" />
+    <NavigationProperty Name="RepairSpareUsage" Relationship="Self.FK_RepairSpare_Repair" FromRole="JigRepairHistory" ToRole="RepairSpareUsage" />
+  </EntityType>
+  <EntityType Name="JigRequest">
+    <Key>
+      <PropertyRef Name="RequestID" />
+    </Key>
+    <Property Name="RequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="JigID" Type="Int32" />
+    <Property Name="RequestType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RequestBy" Type="Int32" />
+    <Property Name="RequestDate" Type="DateTime" Precision="3" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Approver" Type="Int32" />
+    <Property Name="ApproveDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Jig" Relationship="Self.FK_JigRequest_Jig" FromRole="JigRequest" ToRole="Jig" />
+    <NavigationProperty Name="UserAccount" Relationship="Self.FK_JigRequest_Approver" FromRole="JigRequest" ToRole="UserAccount" />
+    <NavigationProperty Name="UserAccount1" Relationship="Self.FK_JigRequest_By" FromRole="JigRequest" ToRole="UserAccount" />
+    <Property Name="Filename" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="FilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="MaintainItem">
+    <Key>
+      <PropertyRef Name="MaintainItemID" />
+    </Key>
+    <Property Name="MaintainItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="JigType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ItemName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ItemGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Frequency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Standard" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Note" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="JigMaintainChecklist" Relationship="Self.FK_Checklist_Item" FromRole="MaintainItem" ToRole="JigMaintainChecklist" />
+  </EntityType>
+  <EntityType Name="MaintainSpareUsage">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaintainID" Type="Int32" Nullable="false" />
+    <Property Name="SpareID" Type="Int32" Nullable="false" />
+    <Property Name="QtyUsed" Type="Int32" />
+    <NavigationProperty Name="JigMaintainHistory" Relationship="Self.FK_MaintainSpare_Maintain" FromRole="MaintainSpareUsage" ToRole="JigMaintainHistory" />
+    <NavigationProperty Name="SparePartStocks" Relationship="Jig_system_controlModel.FK_MaintainSpare_Spare1" FromRole="MaintainSpareUsage" ToRole="SparePartStocks" />
+  </EntityType>
+  <EntityType Name="RepairSpareUsage">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RepairID" Type="Int32" Nullable="false" />
+    <Property Name="SpareID" Type="Int32" Nullable="false" />
+    <Property Name="QtyUsed" Type="Int32" />
+    <NavigationProperty Name="JigRepairHistory" Relationship="Self.FK_RepairSpare_Repair" FromRole="RepairSpareUsage" ToRole="JigRepairHistory" />
+    <NavigationProperty Name="SparePartStocks" Relationship="Jig_system_controlModel.FK_RepairSpare_Spare1" FromRole="RepairSpareUsage" ToRole="SparePartStocks" />
+  </EntityType>
+  <EntityType Name="UserAccount">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Role" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Jig" Relationship="Self.FK_Jig_CreatedBy" FromRole="UserAccount" ToRole="Jig" />
+    <NavigationProperty Name="JigMaintainChecklist" Relationship="Self.FK_Checklist_User" FromRole="UserAccount" ToRole="JigMaintainChecklist" />
+    <NavigationProperty Name="JigMaintainHistory" Relationship="Self.FK_JigMaintain_User" FromRole="UserAccount" ToRole="JigMaintainHistory" />
+    <NavigationProperty Name="JigRepairHistory" Relationship="Self.FK_JigRepair_User" FromRole="UserAccount" ToRole="JigRepairHistory" />
+    <NavigationProperty Name="JigRequest" Relationship="Self.FK_JigRequest_Approver" FromRole="UserAccount" ToRole="JigRequest" />
+    <NavigationProperty Name="JigRequest1" Relationship="Self.FK_JigRequest_By" FromRole="UserAccount" ToRole="JigRequest" />
+  </EntityType>
+  <Association Name="FK_Jig_CreatedBy">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="Jig" Type="Self.Jig" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Jig">
+        <PropertyRef Name="CreatedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JigDocument_Jig">
+    <End Role="Jig" Type="Self.Jig" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JigDocument" Type="Self.JigDocument" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Jig">
+        <PropertyRef Name="JigID" />
+      </Principal>
+      <Dependent Role="JigDocument">
+        <PropertyRef Name="JigID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JigDrawing_Jig">
+    <End Role="Jig" Type="Self.Jig" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JigDrawing" Type="Self.JigDrawing" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Jig">
+        <PropertyRef Name="JigID" />
+      </Principal>
+      <Dependent Role="JigDrawing">
+        <PropertyRef Name="JigID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JigMaintain_Jig">
+    <End Role="Jig" Type="Self.Jig" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JigMaintainHistory" Type="Self.JigMaintainHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Jig">
+        <PropertyRef Name="JigID" />
+      </Principal>
+      <Dependent Role="JigMaintainHistory">
+        <PropertyRef Name="JigID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JigPartList_Jig">
+    <End Role="Jig" Type="Self.Jig" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JigPartList" Type="Self.JigPartList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Jig">
+        <PropertyRef Name="JigID" />
+      </Principal>
+      <Dependent Role="JigPartList">
+        <PropertyRef Name="JigID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JigRepair_Jig">
+    <End Role="Jig" Type="Self.Jig" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JigRepairHistory" Type="Self.JigRepairHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Jig">
+        <PropertyRef Name="JigID" />
+      </Principal>
+      <Dependent Role="JigRepairHistory">
+        <PropertyRef Name="JigID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JigRequest_Jig">
+    <End Role="Jig" Type="Self.Jig" Multiplicity="0..1" />
+    <End Role="JigRequest" Type="Self.JigRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Jig">
+        <PropertyRef Name="JigID" />
+      </Principal>
+      <Dependent Role="JigRequest">
+        <PropertyRef Name="JigID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Checklist_Item">
+    <End Role="MaintainItem" Type="Self.MaintainItem" Multiplicity="1" />
+    <End Role="JigMaintainChecklist" Type="Self.JigMaintainChecklist" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MaintainItem">
+        <PropertyRef Name="MaintainItemID" />
+      </Principal>
+      <Dependent Role="JigMaintainChecklist">
+        <PropertyRef Name="MaintainItemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Checklist_Maintain">
+    <End Role="JigMaintainHistory" Type="Self.JigMaintainHistory" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="JigMaintainChecklist" Type="Self.JigMaintainChecklist" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JigMaintainHistory">
+        <PropertyRef Name="MaintainID" />
+      </Principal>
+      <Dependent Role="JigMaintainChecklist">
+        <PropertyRef Name="MaintainID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Checklist_User">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="JigMaintainChecklist" Type="Self.JigMaintainChecklist" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="JigMaintainChecklist">
+        <PropertyRef Name="UpdatedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JigMaintain_User">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="JigMaintainHistory" Type="Self.JigMaintainHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="JigMaintainHistory">
+        <PropertyRef Name="Maintainer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaintainSpare_Maintain">
+    <End Role="JigMaintainHistory" Type="Self.JigMaintainHistory" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="MaintainSpareUsage" Type="Self.MaintainSpareUsage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JigMaintainHistory">
+        <PropertyRef Name="MaintainID" />
+      </Principal>
+      <Dependent Role="MaintainSpareUsage">
+        <PropertyRef Name="MaintainID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JigRepair_User">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="JigRepairHistory" Type="Self.JigRepairHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="JigRepairHistory">
+        <PropertyRef Name="Technician" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RepairSpare_Repair">
+    <End Role="JigRepairHistory" Type="Self.JigRepairHistory" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="RepairSpareUsage" Type="Self.RepairSpareUsage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JigRepairHistory">
+        <PropertyRef Name="RepairID" />
+      </Principal>
+      <Dependent Role="RepairSpareUsage">
+        <PropertyRef Name="RepairID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JigRequest_Approver">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="JigRequest" Type="Self.JigRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="JigRequest">
+        <PropertyRef Name="Approver" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JigRequest_By">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="JigRequest" Type="Self.JigRequest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="JigRequest">
+        <PropertyRef Name="RequestBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Jig_system_controlEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Jig" EntityType="Self.Jig" />
+    <EntitySet Name="JigDocument" EntityType="Self.JigDocument" />
+    <EntitySet Name="JigDrawing" EntityType="Self.JigDrawing" />
+    <EntitySet Name="JigMaintainChecklist" EntityType="Self.JigMaintainChecklist" />
+    <EntitySet Name="JigMaintainHistory" EntityType="Self.JigMaintainHistory" />
+    <EntitySet Name="JigPartList" EntityType="Self.JigPartList" />
+    <EntitySet Name="JigRepairHistory" EntityType="Self.JigRepairHistory" />
+    <EntitySet Name="JigRequest" EntityType="Self.JigRequest" />
+    <EntitySet Name="MaintainItem" EntityType="Self.MaintainItem" />
+    <EntitySet Name="MaintainSpareUsage" EntityType="Self.MaintainSpareUsage" />
+    <EntitySet Name="RepairSpareUsage" EntityType="Self.RepairSpareUsage" />
+    <EntitySet Name="UserAccount" EntityType="Self.UserAccount" />
+    <AssociationSet Name="FK_Jig_CreatedBy" Association="Self.FK_Jig_CreatedBy">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="Jig" EntitySet="Jig" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JigDocument_Jig" Association="Self.FK_JigDocument_Jig">
+      <End Role="Jig" EntitySet="Jig" />
+      <End Role="JigDocument" EntitySet="JigDocument" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JigDrawing_Jig" Association="Self.FK_JigDrawing_Jig">
+      <End Role="Jig" EntitySet="Jig" />
+      <End Role="JigDrawing" EntitySet="JigDrawing" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JigMaintain_Jig" Association="Self.FK_JigMaintain_Jig">
+      <End Role="Jig" EntitySet="Jig" />
+      <End Role="JigMaintainHistory" EntitySet="JigMaintainHistory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JigPartList_Jig" Association="Self.FK_JigPartList_Jig">
+      <End Role="Jig" EntitySet="Jig" />
+      <End Role="JigPartList" EntitySet="JigPartList" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JigRepair_Jig" Association="Self.FK_JigRepair_Jig">
+      <End Role="Jig" EntitySet="Jig" />
+      <End Role="JigRepairHistory" EntitySet="JigRepairHistory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JigRequest_Jig" Association="Self.FK_JigRequest_Jig">
+      <End Role="Jig" EntitySet="Jig" />
+      <End Role="JigRequest" EntitySet="JigRequest" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Checklist_Item" Association="Self.FK_Checklist_Item">
+      <End Role="MaintainItem" EntitySet="MaintainItem" />
+      <End Role="JigMaintainChecklist" EntitySet="JigMaintainChecklist" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Checklist_Maintain" Association="Self.FK_Checklist_Maintain">
+      <End Role="JigMaintainHistory" EntitySet="JigMaintainHistory" />
+      <End Role="JigMaintainChecklist" EntitySet="JigMaintainChecklist" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Checklist_User" Association="Self.FK_Checklist_User">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="JigMaintainChecklist" EntitySet="JigMaintainChecklist" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JigMaintain_User" Association="Self.FK_JigMaintain_User">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="JigMaintainHistory" EntitySet="JigMaintainHistory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaintainSpare_Maintain" Association="Self.FK_MaintainSpare_Maintain">
+      <End Role="JigMaintainHistory" EntitySet="JigMaintainHistory" />
+      <End Role="MaintainSpareUsage" EntitySet="MaintainSpareUsage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JigRepair_User" Association="Self.FK_JigRepair_User">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="JigRepairHistory" EntitySet="JigRepairHistory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RepairSpare_Repair" Association="Self.FK_RepairSpare_Repair">
+      <End Role="JigRepairHistory" EntitySet="JigRepairHistory" />
+      <End Role="RepairSpareUsage" EntitySet="RepairSpareUsage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JigRequest_Approver" Association="Self.FK_JigRequest_Approver">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="JigRequest" EntitySet="JigRequest" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JigRequest_By" Association="Self.FK_JigRequest_By">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="JigRequest" EntitySet="JigRequest" />
+    </AssociationSet>
+    <FunctionImport Name="sp_MatchImportFIFO">
+      <Parameter Name="SpareID" Mode="In" Type="Int32" />
+      <Parameter Name="ImportQty" Mode="In" Type="Int32" />
+      <Parameter Name="TransactionID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="SparePartApprovals" EntityType="Jig_system_controlModel.SparePartApprovals" />
+    <EntitySet Name="SparePartReceiptDetails" EntityType="Jig_system_controlModel.SparePartReceiptDetails" />
+    <EntitySet Name="SparePartReceipts" EntityType="Jig_system_controlModel.SparePartReceipts" />
+    <EntitySet Name="SparePartRequests" EntityType="Jig_system_controlModel.SparePartRequests" />
+    <EntitySet Name="SparePartStocks" EntityType="Jig_system_controlModel.SparePartStocks" />
+    <EntitySet Name="SparePartTransactions" EntityType="Jig_system_controlModel.SparePartTransactions" />
+    <EntitySet Name="SparePartUse" EntityType="Jig_system_controlModel.SparePartUse" />
+    <EntitySet Name="sysdiagrams" EntityType="Jig_system_controlModel.sysdiagrams" />
+    <EntitySet Name="vw_SparePart_PendingRequests" EntityType="Jig_system_controlModel.vw_SparePart_PendingRequests" />
+    <EntitySet Name="vw_SparePart_WaitingRequestStatus" EntityType="Jig_system_controlModel.vw_SparePart_WaitingRequestStatus" />
+    <AssociationSet Name="FK_JigPartList_Spare1" Association="Jig_system_controlModel.FK_JigPartList_Spare1">
+      <End Role="SparePartStocks" EntitySet="SparePartStocks" />
+      <End Role="JigPartList" EntitySet="JigPartList" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaintainSpare_Spare1" Association="Jig_system_controlModel.FK_MaintainSpare_Spare1">
+      <End Role="SparePartStocks" EntitySet="SparePartStocks" />
+      <End Role="MaintainSpareUsage" EntitySet="MaintainSpareUsage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RepairSpare_Spare1" Association="Jig_system_controlModel.FK_RepairSpare_Spare1">
+      <End Role="SparePartStocks" EntitySet="SparePartStocks" />
+      <End Role="RepairSpareUsage" EntitySet="RepairSpareUsage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_App_Request" Association="Jig_system_controlModel.FK_App_Request">
+      <End Role="SparePartRequests" EntitySet="SparePartRequests" />
+      <End Role="SparePartApprovals" EntitySet="SparePartApprovals" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Rd_Receipt" Association="Jig_system_controlModel.FK_Rd_Receipt">
+      <End Role="SparePartReceipts" EntitySet="SparePartReceipts" />
+      <End Role="SparePartReceiptDetails" EntitySet="SparePartReceiptDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Rd_Request" Association="Jig_system_controlModel.FK_Rd_Request">
+      <End Role="SparePartRequests" EntitySet="SparePartRequests" />
+      <End Role="SparePartReceiptDetails" EntitySet="SparePartReceiptDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Rd_Spare" Association="Jig_system_controlModel.FK_Rd_Spare">
+      <End Role="SparePartStocks" EntitySet="SparePartStocks" />
+      <End Role="SparePartReceiptDetails" EntitySet="SparePartReceiptDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Req_Spare" Association="Jig_system_controlModel.FK_Req_Spare">
+      <End Role="SparePartStocks" EntitySet="SparePartStocks" />
+      <End Role="SparePartRequests" EntitySet="SparePartRequests" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Use_Request" Association="Jig_system_controlModel.FK_Use_Request">
+      <End Role="SparePartRequests" EntitySet="SparePartRequests" />
+      <End Role="SparePartUse" EntitySet="SparePartUse" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Use_Spare" Association="Jig_system_controlModel.FK_Use_Spare">
+      <End Role="SparePartStocks" EntitySet="SparePartStocks" />
+      <End Role="SparePartUse" EntitySet="SparePartUse" />
+    </AssociationSet>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_AutoDistributeReceipt">
+      <Parameter Name="SpareID" Mode="In" Type="Int32" />
+      <Parameter Name="ReceivedQty" Mode="In" Type="Int32" />
+      <Parameter Name="CreatedBy" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(Jig_system_controlModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(Jig_system_controlModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+  </EntityContainer>
+  <EntityType Name="SparePartApprovals">
+    <Key>
+      <PropertyRef Name="ApprovalID" />
+    </Key>
+    <Property Name="ApprovalID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RequestID" Type="Int32" Nullable="false" />
+    <Property Name="ApprovedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ApprovedDate" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedQty" Type="Int32" />
+    <Property Name="Remark" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="SparePartRequests" Relationship="Jig_system_controlModel.FK_App_Request" FromRole="SparePartApprovals" ToRole="SparePartRequests" />
+  </EntityType>
+  <EntityType Name="SparePartReceiptDetails">
+    <Key>
+      <PropertyRef Name="DetailID" />
+    </Key>
+    <Property Name="DetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ReceiptID" Type="Int32" Nullable="false" />
+    <Property Name="RequestID" Type="Int32" />
+    <Property Name="SpareID" Type="Int32" Nullable="false" />
+    <Property Name="QtyReceived" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="SparePartReceipts" Relationship="Jig_system_controlModel.FK_Rd_Receipt" FromRole="SparePartReceiptDetails" ToRole="SparePartReceipts" />
+    <NavigationProperty Name="SparePartRequests" Relationship="Jig_system_controlModel.FK_Rd_Request" FromRole="SparePartReceiptDetails" ToRole="SparePartRequests" />
+    <NavigationProperty Name="SparePartStocks" Relationship="Jig_system_controlModel.FK_Rd_Spare" FromRole="SparePartReceiptDetails" ToRole="SparePartStocks" />
+  </EntityType>
+  <EntityType Name="SparePartReceipts">
+    <Key>
+      <PropertyRef Name="ReceiptID" />
+    </Key>
+    <Property Name="ReceiptID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TotalQty" Type="Int32" />
+    <Property Name="Remark" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ReceiptDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="SparePartReceiptDetails" Relationship="Jig_system_controlModel.FK_Rd_Receipt" FromRole="SparePartReceipts" ToRole="SparePartReceiptDetails" />
+  </EntityType>
+  <EntityType Name="SparePartRequests">
+    <Key>
+      <PropertyRef Name="RequestID" />
+    </Key>
+    <Property Name="RequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SpareID" Type="Int32" Nullable="false" />
+    <Property Name="RequestedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="RequestDate" Type="DateTime" Precision="3" />
+    <Property Name="QtyRequested" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Remark" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="SparePartApprovals" Relationship="Jig_system_controlModel.FK_App_Request" FromRole="SparePartRequests" ToRole="SparePartApprovals" />
+    <NavigationProperty Name="SparePartReceiptDetails" Relationship="Jig_system_controlModel.FK_Rd_Request" FromRole="SparePartRequests" ToRole="SparePartReceiptDetails" />
+    <NavigationProperty Name="SparePartStocks" Relationship="Jig_system_controlModel.FK_Req_Spare" FromRole="SparePartRequests" ToRole="SparePartStocks" />
+    <NavigationProperty Name="SparePartUse" Relationship="Jig_system_controlModel.FK_Use_Request" FromRole="SparePartRequests" ToRole="SparePartUse" />
+  </EntityType>
+  <EntityType Name="SparePartStocks">
+    <Key>
+      <PropertyRef Name="SpareID" />
+    </Key>
+    <Property Name="SpareID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Maker" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CurrentQty" Type="Int32" />
+    <Property Name="Location" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="Remark" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="MinStock" Type="Int32" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="JigPartList" Relationship="Jig_system_controlModel.FK_JigPartList_Spare1" FromRole="SparePartStocks" ToRole="JigPartList" />
+    <NavigationProperty Name="MaintainSpareUsage" Relationship="Jig_system_controlModel.FK_MaintainSpare_Spare1" FromRole="SparePartStocks" ToRole="MaintainSpareUsage" />
+    <NavigationProperty Name="RepairSpareUsage" Relationship="Jig_system_controlModel.FK_RepairSpare_Spare1" FromRole="SparePartStocks" ToRole="RepairSpareUsage" />
+    <NavigationProperty Name="SparePartReceiptDetails" Relationship="Jig_system_controlModel.FK_Rd_Spare" FromRole="SparePartStocks" ToRole="SparePartReceiptDetails" />
+    <NavigationProperty Name="SparePartRequests" Relationship="Jig_system_controlModel.FK_Req_Spare" FromRole="SparePartStocks" ToRole="SparePartRequests" />
+    <NavigationProperty Name="SparePartUse" Relationship="Jig_system_controlModel.FK_Use_Spare" FromRole="SparePartStocks" ToRole="SparePartUse" />
+  </EntityType>
+  <EntityType Name="SparePartTransactions">
+    <Key>
+      <PropertyRef Name="TranID" />
+    </Key>
+    <Property Name="TranID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SpareID" Type="Int32" Nullable="false" />
+    <Property Name="Type" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Qty" Type="Int32" />
+    <Property Name="RelatedID" Type="Int32" />
+    <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="SparePartUse">
+    <Key>
+      <PropertyRef Name="UseID" />
+    </Key>
+    <Property Name="UseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SpareID" Type="Int32" Nullable="false" />
+    <Property Name="RequestID" Type="Int32" />
+    <Property Name="Qty" Type="Int32" Nullable="false" />
+    <Property Name="IssuedTo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IssueDate" Type="DateTime" Precision="3" />
+    <Property Name="Remark" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="SparePartRequests" Relationship="Jig_system_controlModel.FK_Use_Request" FromRole="SparePartUse" ToRole="SparePartRequests" />
+    <NavigationProperty Name="SparePartStocks" Relationship="Jig_system_controlModel.FK_Use_Spare" FromRole="SparePartUse" ToRole="SparePartStocks" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="vw_SparePart_PendingRequests">
+    <Key>
+      <PropertyRef Name="RequestID" />
+      <PropertyRef Name="Code" />
+      <PropertyRef Name="Name" />
+      <PropertyRef Name="QtyReceived" />
+      <PropertyRef Name="SpareID" />
+    </Key>
+    <Property Name="RequestID" Type="Int32" Nullable="false" />
+    <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="QtyReceived" Type="Int32" Nullable="false" />
+    <Property Name="QtyPending" Type="Int32" />
+    <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="SpareID" Type="Int32" Nullable="false" />
+    <Property Name="ApprovedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ApprovedDate" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedQty" Type="Int32" />
+  </EntityType>
+  <EntityType Name="vw_SparePart_WaitingRequestStatus">
+    <Key>
+      <PropertyRef Name="SpareID" />
+      <PropertyRef Name="Code" />
+      <PropertyRef Name="Name" />
+      <PropertyRef Name="TotalReceived" />
+    </Key>
+    <Property Name="SpareID" Type="Int32" Nullable="false" />
+    <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="TotalRequested" Type="Int32" />
+    <Property Name="TotalReceived" Type="Int32" Nullable="false" />
+    <Property Name="QtyPending" Type="Int32" />
+    <Property Name="PendingRequestCount" Type="Int32" />
+  </EntityType>
+  <Association Name="FK_JigPartList_Spare1">
+    <End Type="Jig_system_controlModel.SparePartStocks" Role="SparePartStocks" Multiplicity="1" />
+    <End Type="Jig_system_controlModel.JigPartList" Role="JigPartList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SparePartStocks">
+        <PropertyRef Name="SpareID" />
+      </Principal>
+      <Dependent Role="JigPartList">
+        <PropertyRef Name="SpareID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaintainSpare_Spare1">
+    <End Type="Jig_system_controlModel.SparePartStocks" Role="SparePartStocks" Multiplicity="1" />
+    <End Type="Jig_system_controlModel.MaintainSpareUsage" Role="MaintainSpareUsage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SparePartStocks">
+        <PropertyRef Name="SpareID" />
+      </Principal>
+      <Dependent Role="MaintainSpareUsage">
+        <PropertyRef Name="SpareID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RepairSpare_Spare1">
+    <End Type="Jig_system_controlModel.SparePartStocks" Role="SparePartStocks" Multiplicity="1" />
+    <End Type="Jig_system_controlModel.RepairSpareUsage" Role="RepairSpareUsage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SparePartStocks">
+        <PropertyRef Name="SpareID" />
+      </Principal>
+      <Dependent Role="RepairSpareUsage">
+        <PropertyRef Name="SpareID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_App_Request">
+    <End Type="Jig_system_controlModel.SparePartRequests" Role="SparePartRequests" Multiplicity="1" />
+    <End Type="Jig_system_controlModel.SparePartApprovals" Role="SparePartApprovals" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SparePartRequests">
+        <PropertyRef Name="RequestID" />
+      </Principal>
+      <Dependent Role="SparePartApprovals">
+        <PropertyRef Name="RequestID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Rd_Receipt">
+    <End Type="Jig_system_controlModel.SparePartReceipts" Role="SparePartReceipts" Multiplicity="1" />
+    <End Type="Jig_system_controlModel.SparePartReceiptDetails" Role="SparePartReceiptDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SparePartReceipts">
+        <PropertyRef Name="ReceiptID" />
+      </Principal>
+      <Dependent Role="SparePartReceiptDetails">
+        <PropertyRef Name="ReceiptID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Rd_Request">
+    <End Type="Jig_system_controlModel.SparePartRequests" Role="SparePartRequests" Multiplicity="0..1" />
+    <End Type="Jig_system_controlModel.SparePartReceiptDetails" Role="SparePartReceiptDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SparePartRequests">
+        <PropertyRef Name="RequestID" />
+      </Principal>
+      <Dependent Role="SparePartReceiptDetails">
+        <PropertyRef Name="RequestID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Rd_Spare">
+    <End Type="Jig_system_controlModel.SparePartStocks" Role="SparePartStocks" Multiplicity="1" />
+    <End Type="Jig_system_controlModel.SparePartReceiptDetails" Role="SparePartReceiptDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SparePartStocks">
+        <PropertyRef Name="SpareID" />
+      </Principal>
+      <Dependent Role="SparePartReceiptDetails">
+        <PropertyRef Name="SpareID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Req_Spare">
+    <End Type="Jig_system_controlModel.SparePartStocks" Role="SparePartStocks" Multiplicity="1" />
+    <End Type="Jig_system_controlModel.SparePartRequests" Role="SparePartRequests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SparePartStocks">
+        <PropertyRef Name="SpareID" />
+      </Principal>
+      <Dependent Role="SparePartRequests">
+        <PropertyRef Name="SpareID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Use_Request">
+    <End Type="Jig_system_controlModel.SparePartRequests" Role="SparePartRequests" Multiplicity="0..1" />
+    <End Type="Jig_system_controlModel.SparePartUse" Role="SparePartUse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SparePartRequests">
+        <PropertyRef Name="RequestID" />
+      </Principal>
+      <Dependent Role="SparePartUse">
+        <PropertyRef Name="RequestID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Use_Spare">
+    <End Type="Jig_system_controlModel.SparePartStocks" Role="SparePartStocks" Multiplicity="1" />
+    <End Type="Jig_system_controlModel.SparePartUse" Role="SparePartUse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SparePartStocks">
+        <PropertyRef Name="SpareID" />
+      </Principal>
+      <Dependent Role="SparePartUse">
+        <PropertyRef Name="SpareID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+</Schema>

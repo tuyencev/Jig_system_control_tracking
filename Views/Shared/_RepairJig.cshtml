@@ -1,0 +1,98 @@
+﻿<!-- Modal: Báo hỏng Jig -->
+<div class="modal fade" id="modalRepairJig" tabindex="-1" role="dialog" aria-labelledby="repairJigLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="repairJigLabel">Báo Jig hỏng / Sửa chữa</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span>&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formRepairJig" enctype="multipart/form-data">
+                    <div class="form-group mb-3">
+                        <label for="searchJig">Tìm kiếm Jig</label>
+                        <select id="searchJig" name="JigID" class="form-control" style="width:100%"></select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label>Vấn đề (Problem)</label>
+                            <textarea name="Problem" class="form-control" rows="2" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label>Tệp đính kèm</label>
+                            <input type="file" name="FileUpload" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ghi chú (Remark)</label>
+                        <textarea name="Remark" class="form-control" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-success" id="btnSaveRepair">Lưu báo hỏng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#searchJig').select2({
+        theme: "bootstrap4",
+        placeholder: "Tìm Jig theo Code hoặc Name...",
+        minimumInputLength: 2,
+        ajax: {
+            url: '/Home/GetSuggestions',
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return { query: params.term };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.map(function (item) {
+                        return {
+                            id: item.JigID,
+                            text: item.JigCode + ' - ' + item.JigName + ' (' + item.Model + ')'
+                        };
+                    })
+                };
+            },
+            cache: true
+        }, dropdownParent: $('#modalRepairJig') // 👈 Thêm dòng này
+    });
+    $(document).on('click', '#btnSaveRepair', function () {
+        let formData = new FormData($('#formRepairJig')[0]);
+
+        $.ajax({
+            url: '/RepairMaintenance/AddRepair',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+                if (res.success) {
+                    toastr.success("Đã lưu phiếu sửa chữa!");
+                    $('#modalRepairJig').modal('hide');
+                    $('#formRepairJig')[0].reset();
+                    $('#searchJig').val(null).trigger('change');
+                } else {
+                    toastr.warning(res.message || "Không thể lưu báo hỏng");
+                }
+            },
+            error: function () {
+                toastr.error("Lỗi hệ thống khi lưu báo hỏng");
+            }
+        });
+    });
+
+</script>

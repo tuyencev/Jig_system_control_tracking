@@ -1,0 +1,72 @@
+﻿@* ==============================
+    Partial: _PartListPartial.cshtml
+    Mục đích: Quản lý danh sách linh kiện (Spare Part)
+    Tái sử dụng cho Create và Edit Jig
+    ============================== *@
+
+
+<div class="card mt-3 shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center bg-light">
+        <h6 class="mb-0 font-weight-bold">Danh sách linh kiện</h6>
+        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalSparePart">
+            <i class="fas fa-plus"></i> Thêm linh kiện
+        </button>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="tblParts" class="table table-sm table-bordered align-middle">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width:40px;">#</th>
+                        <th>Mã linh kiện</th>
+                        <th>Tên linh kiện</th>
+                        <th>Maker</th>
+                        <th style="width:100px;">Số lượng</th>
+                        <th>Ghi chú</th>
+                        <th style="width:100px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <input type="hidden" id="hiddenParts" name="PartListJson" />
+    </div>
+</div>
+
+<!-- ===================== -->
+<!-- MODAL CHỌN LINH KIỆN -->
+<!-- ===================== -->
+<div class="modal fade" id="modalSparePart" tabindex="-1" role="dialog" aria-labelledby="modalSparePartLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="modalSparePartLabel">Chọn linh kiện</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="txtSearchSpare" class="form-control mb-3" placeholder="Nhập mã hoặc tên linh kiện để tìm...">
+
+                <table class="table table-hover table-bordered" id="tblSearchSpare">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Mã</th>
+                            <th>Tên</th>
+                            <th>Maker</th>
+                            <th>Model</th>
+                            <th style="width:100px;">Số lượng</th>
+                            <th style="width:60px;">Chọn</th>
+                        </tr>
+                    </thead>
+                    <tbody id="spareResults"></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+

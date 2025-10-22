@@ -1,0 +1,92 @@
+﻿<!-- Modal: Thêm linh kiện mới -->
+<div class="modal fade" id="modalAddSpare" tabindex="-1" role="dialog" aria-labelledby="addSpareLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="addSpareLabel">Thêm linh kiện mới</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formAddSpare">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Mã linh kiện (Code)</label>
+                                <input type="text" name="Code" class="form-control" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên linh kiện</label>
+                                <input type="text" name="Name" class="form-control" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Model</label>
+                                <input type="text" name="Model" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Maker</label>
+                                <input type="text" name="Maker" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>Đơn vị tính</label>
+                                <input type="text" name="Unit" class="form-control" placeholder="pcs, set, m..." />
+                            </div>
+                            <div class="form-group">
+                                <label>Số lượng</label>
+                                <input type="number" name="CurrentQty" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>Vị trí lưu kho</label>
+                                <input type="text" name="Location" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ghi chú</label>
+                        <textarea name="Remark" class="form-control" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-success" id="btnSaveSpare">Lưu linh kiện</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on('click', '#btnSaveSpare', function () {
+        const data = $('#formAddSpare').serialize();
+
+        $.ajax({
+            url: '/SparePart/AddSpare',
+            type: 'POST',
+            data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+           
+            success: function (res) {
+                console.log(res);
+                if (res.success) {
+                    toastr.success("Đã thêm linh kiện mới!");
+                    $('#modalAddSpare').modal('hide');
+                    $('#formAddSpare')[0].reset();
+
+                    // Nếu đang có bảng linh kiện thì reload luôn
+                } else {
+                    toastr.warning(res.message || "Không thể thêm linh kiện");
+                }
+            },
+            error: function () {
+                toastr.error("Lỗi hệ thống khi thêm linh kiện");
+                console.log(data);
+            }
+        });
+    });
+</script>

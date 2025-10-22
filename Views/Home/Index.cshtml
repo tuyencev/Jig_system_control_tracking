@@ -1,0 +1,152 @@
+﻿@{
+    ViewBag.Title = "Jig Scan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="w-50 mx-auto text-center justify-content-center py-5 my-5">
+                <h2 class="page-title mb-0">
+                    Canon Electronics Viet Nam
+                </h2>
+                <p class="lead text-muted mb-4">Nhập mã jig để tìm kiếm</p>
+                <div class="row justify-content-center">
+                    <div class="col-8 col-lg-8">
+                        <select name="searchForm" id="searchForm" class="form-control w-75 mx-auto"></select>
+                    </div>
+                </div>
+
+                <!-- Chỗ hiển thị thông báo -->
+                <div id="alertBox" class="alert alert-danger mt-3 d-none"></div>
+            </div>
+            <div class="row my-4">
+                <div class="col-6 col-lg-3">
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <i class="fe fe-edit-3 fe-32 text-primary"></i>
+                            <a href="/Home/Create_jig">
+                                <h3 class="h5 mt-4 mb-1">Tạo Jig mới</h3>
+                            </a>
+                            <p class="text-muted">Nhấn vào đây để tạo hồ sơ jig mới</p>
+                        </div> <!-- .card-body -->
+                    </div> <!-- .card -->
+                </div> <!-- .col-md-->
+                <div class="col-6 col-lg-3">
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <i class="fe fe-life-buoy fe-32 text-success"></i>
+                            <a href="./page-faqs.html">
+                                <h3 class="h5 mt-4 mb-1">Sửa Chữa</h3>
+                            </a>
+                            <p class="text-muted">Sửa chữa jig</p>
+                        </div> <!-- .card-body -->
+                    </div> <!-- .card -->
+                </div> <!-- .col-md-->
+                <div class="col-6 col-lg-3">
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <i class="fe fe-loader fe-32 text-warning"></i>
+                            <a href="#">
+                                <h3 class="h5 mt-4 mb-1">Bảo dưỡng jig</h3>
+                            </a>
+                            <p class="text-muted">Bảo dưỡng jig định kỳ</p>
+                        </div> <!-- .card-body -->
+                    </div> <!-- .card -->
+                </div> <!-- .col-md-->
+                <div class="col-6 col-lg-3">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <i class="fe fe-shopping-cart fe-32 text-danger"></i>
+                            <a href="#">
+                                <h3 class="h5 mt-4 mb-1">Spare part</h3>
+                            </a>
+                            <p class="text-muted">Tạo yêu cầu spare part</p>
+                        </div> <!-- .card-body -->
+                    </div> <!-- .card -->
+                </div> <!-- .col-md-->
+            </div> <!-- .row -->
+            <div class="my-5 p-5">
+                <div class="text-center">
+                    <h2 class="mb-0">
+                        Jig System Control
+                    </h2>
+                    <p class="lead text-muted mb-5">
+                        Management collection system: track status, manage repair, plan maintenance, and order spares.
+                    </p>
+                </div>
+            </div>
+
+        </div> <!-- .col-12 -->
+    </div> <!-- .row -->
+
+</div> <!-- .container-fluid -->
+
+
+<script src="~/js/jquery.min.js"></script>
+<link href="~/css/select2.css" rel="stylesheet" />
+<script src="~/js/select2.min.js"></script>
+<script>
+
+
+
+    // Kích hoạt Select2
+    $('#searchForm').select2({
+        theme: "bootstrap4",
+        placeholder: "Tìm Jig theo Code hoặc Name...",
+        minimumInputLength: 2,
+        ajax: {
+            url: '/Home/GetSuggestions',
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return { query: params.term };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.map(function (item) {
+                        return {
+                            id: item.JigID,
+                            text: item.JigCode + ' - ' + item.JigName + ' (' + item.Model + ')'
+                        };
+                    })
+                };
+            },
+            cache: true
+        }
+    });
+    $('#searchForm').on('select2:select', function (e) {
+        const jigId = e.params.data.id;
+        console.log('Selected JigID:', jigId); // debug
+        if (jigId)
+            window.location.href = '/Home/Info/' + jigId;
+        else
+            alert('Không lấy được ID Jig!');
+    });
+
+    $(function () {
+        // Autocomplete
+        $("#jigInput").on("keyup", function () {
+            let keyword = $(this).val();
+            if (keyword.length < 2) return;
+
+            $.get("/Home/GetSuggestions", { term: keyword }, function (data) {
+                let list = data || [];
+                // Gợi ý đơn giản bằng datalist
+                let datalist = $("#jigSuggestions");
+                if (datalist.length === 0) {
+                    $("#jigInput").after('<datalist id="jigSuggestions"></datalist>');
+                    $("#jigInput").attr("list", "jigSuggestions");
+                    datalist = $("#jigSuggestions");
+                }
+                datalist.empty();
+                list.forEach(item => datalist.append(`<option value="${item}"/>`));
+            });
+        });
+
+        // Form submit
+
+
+    });
+</script>

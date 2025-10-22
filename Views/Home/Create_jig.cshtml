@@ -1,0 +1,594 @@
+﻿
+@{
+    ViewBag.Title = "Create_jig";
+    Layout = "~/Views/Shared/_AfterLogin.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <h2 class="page-title">Thêm jig mới</h2>
+            <div class="card my-4">
+                <div class="card-header">
+                    <strong>Thông tin</strong>
+                </div>
+                <div class="card-body">
+                    <form id="example-form" method="post" enctype="multipart/form-data" action="/Home/Create_jig">
+                        <div>
+                            <h3>Info</h3>
+                            <section>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="validationCustom33">Mã Jig *</label>
+                                        <input type="text" class="form-control required" name="JigCode" placeholder="nhập mã jig...">
+                                        <div class="invalid-feedback"> Hãy nhập mã jig </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="validationCustom31">Tên Jig *</label>
+                                        <input type="text" class="form-control required" name="JigName" placeholder="nhập tên jig...">
+                                        <div class="invalid-feedback"> Hãy nhập tên jig </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="validationCustom30">Version *</label>
+                                        <input type="number" class="form-control required" name="Version" placeholder="nhập version...">
+                                        <div class="invalid-feedback"> Hãy nhập version jig </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+
+                                        <label for="validationCustom34">Model</label>
+                                        <input type="text" class="form-control required" name="Model" placeholder="nhập tên model...">
+                                        <div class="invalid-feedback"> Hãy nhập tên model </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="validationCustom35">Type</label>
+                                        <input type="text" class="form-control required" name="Type" placeholder="nhập Type...">
+                                        <div class="invalid-feedback"> Hãy nhập Type jig </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+
+                                        <label for="validationCustom36">Range</label>
+                                        <input type="text" class="form-control required" name="Range" placeholder="nhập range...">
+                                        <div class="invalid-feedback"> Hãy nhập tên model </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Hình Ảnh *</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input type="file" name="Image" class="form-control-file required">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="help-text text-muted">(*) Bắt buộc nhập</div>
+                            </section>
+                            <h3>Tài liệu</h3>
+                            <section>
+                                <div id="document-list">
+                                    <button type="button" id="btnAddDocument" class="btn btn-outline-primary">
+                                        + Thêm tài liệu khác
+                                    </button>
+                                    <div class="form-group mb-3">
+                                        <label>PMCS</label>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="file" name="PMCS" class="form-control-file">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="PmcsVersion" class="form-control" placeholder="Version">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <input type="text" name="PmcsNote" class="form-control" placeholder="Ghi chú">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label>Machine checksheet</label>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="file" name="Machine_checksheet" class="form-control-file">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="ChecksheetVersion" class="form-control" placeholder="Version">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <input type="text" name="ChecksheetNote" class="form-control" placeholder="Ghi chú">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label>Manual</label>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="file" name="Manual" class="form-control-file">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="ManualVersion" class="form-control" placeholder="Version">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <input type="text" name="ManualNote" class="form-control" placeholder="Ghi chú">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label>Maintain</label>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="file" name="Maintain" class="form-control-file">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="MaintainVersion" class="form-control" placeholder="Version">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <input type="text" name="MaintainNote" class="form-control" placeholder="Ghi chú">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </section>
+
+                            <h3>Bản Vẽ</h3>
+                            <section>
+                                <div id="drawing-list">
+                                    <button type="button" id="btnAddDrawing" class="btn btn-outline-primary">
+                                        + Thêm bản vẽ
+                                    </button>
+                                </div>
+                            </section>
+                            <h3>Spare Part List</h3>
+                            <section>
+
+
+                                <div class="row">
+                                    <div class="col-10">
+                                        <div class="row">
+                                            <label>Chọn linh kiện</label>
+                                            <div class="col-4">
+                                                <select name="searchSpareID" id="searchSpareID" class="form-control mr-2" style="width:300px"></select>
+                                            </div>
+                                            <div class="col-2">
+                                                <input type="number" id="Qty" class="form-control mr-2" style="width:100px" value="1" min="1" placeholder="SL" />
+                                            </div>
+                                            <div class="col-2">
+
+                                                <input type="text" id="Note" class="form-control mr-2" style="width:100px" placeholder="Ghi chú" />
+                                            </div>
+                                            <div class="col-2">
+                                                <button type="button" class="btn btn-success" id="btnAddPart">
+                                                    <i class="fas fa-plus"></i> Thêm
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                        <div class="col-2">
+                                            <button type="button" id="btnAddNewSpare" class="btn btn-primary">
+                                                + Thêm linh kiện mới
+                                            </button>
+                                        </div>
+                                    </div>
+            
+                <div class="modal fade" id="addSpareModal" tabindex="-1" aria-labelledby="addSpareModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Thêm mới linh kiện</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label>Mã linh kiện</label>
+                                        <input id="spareCode" class="form-control" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Tên linh kiện</label>
+                                        <input id="spareName" class="form-control" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Maker</label>
+                                        <input id="spareMaker" class="form-control" />
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Số lượng request</label>
+                                        <input type="number" id="spareqty" class="form-control" min="1" value="1" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label>Ghi chú</label>
+                                        <input type="text" id="spareRemark" class="form-control" placeholder="Ghi chú nếu có..." />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                <button type="button" id="btnSaveSpare" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="tblParts" class="table table-bordered table-sm">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th style="width:40px;">#</th>
+                                    <th>Mã</th>
+                                    <th>Tên</th>
+                                    <th>Maker</th>
+                                    <th style="width:100px;">Số lượng</th>
+                                    <th>Ghi chú</th>
+                                    <th style="width:100px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <input type="hidden" id="hiddenParts" name="PartListJson" />
+                </div>
+
+                </section>
+
+                <h3>Yêu cầu đặc biệt</h3>
+                <section>
+                    <div id="request-list">
+                        <div class="form-group mb-3 border p-3 rounded">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <input type="text" name="Note" class="form-control mb-2" placeholder="Nhập yêu cầu, ghi chú khi sửa chữa, bảo dưỡng ....">
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </div>
+                    </form>
+                </div> <!-- .card-body -->
+            </div> <!-- .card -->
+        </div> <!-- .col-12 -->
+    </div> <!-- .row -->
+</div> <!-- .container-fluid -->
+
+@section Scripts {
+    <link href="~/css/select2.css" rel="stylesheet" />
+    <script src="~/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            let partList = [];
+            let tempIndex = 1;
+
+
+            const form = $("#example-form");
+
+            // Đảm bảo beforeSubmit chạy trước khi gửi
+            form.on("submit", function (e) {
+                console.log("📦 Gọi beforeSubmit trước khi submit form...");
+
+                if (typeof window.beforeSubmit === "function") {
+                    const ok = window.beforeSubmit();
+                    if (ok === false) {
+                        e.preventDefault(); // Dừng lại nếu có lỗi
+                        console.warn("❌ beforeSubmit trả về false — hủy submit");
+                        return false;
+                    }
+                }
+
+                console.log("✅ Dữ liệu hiddenParts:", $("#hiddenParts").val());
+                return true; // Tiếp tục submit
+            });
+  
+
+        // Hàm gom partList lại
+        window.beforeSubmit = function () {
+            console.log("🔥 beforeSubmit chạy!", partList);
+            $('#hiddenParts').val(JSON.stringify(partList));
+            return true;
+        };
+
+            // --- 1️⃣ Khởi tạo Select2 ---
+            $("#searchSpareID").select2({
+                placeholder: "Nhập mã hoặc tên linh kiện...",
+                minimumInputLength: 1,
+                width: 'resolve',
+                ajax: {
+                    url: '/Home/SearchSparePart',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return { keyword: params.term };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.map(x => ({
+                                id: x.SpareID,
+                                text: `${x.Code} - ${x.Name} (${x.Maker || 'N/A'})`
+                            }))
+                        };
+                    }
+                }
+            });
+
+            // --- 2️⃣ Khi nhấn nút Add ---
+            $('#btnAddPart').on('click', function () {
+                const spareId = $('#searchSpareID').val();
+                const spareText = $('#searchSpareID').select2('data')[0]?.text;
+                const qty = $('#Qty').val();
+                const note = $('#Note').val();
+
+                if (!spareId) {
+                    alert('Vui lòng chọn linh kiện!');
+                    return;
+                }
+
+                if (partList.some(p => p.SpareID == spareId)) {
+                    alert('Linh kiện này đã có trong danh sách!');
+                    return;
+                }
+
+                partList.push({
+                    TempID: tempIndex++,
+                    SpareID: spareId,
+                    SpareText: spareText,
+                    Qty: qty,
+                    Note:note
+                });
+
+                renderPartTable();
+                $('#searchSpareID').val(null).trigger('change');
+                $('#Qty').val(1);
+            });
+
+
+            $('#btnAddNewSpare').on('click', function () {
+                $('#addSpareModal').modal('show');
+            });
+
+            // 7️⃣ Lưu linh kiện mới
+            $('#btnSaveSpare').on('click', function () {
+
+                const data = {
+                    Code: $('#spareCode').val(),
+                    Name: $('#spareName').val(),
+                    Maker: $('#spareMaker').val(),
+                    QtyRequested: $('#spareqty').val(),
+                    Remark: $('#spareRemark').val()
+                };
+                console.log(data);
+
+                if (!data.Code || !data.Name) {
+                    alert("Vui lòng nhập mã và tên linh kiện.");
+                    return;
+                }
+                $.ajax({
+                    url: '/SparePart/CreateNewSpareAndRequest',
+                    type: 'POST',
+                    data: data,
+                    success: function (res) {
+                        if (res.success) {
+                            alert('✅ Đã thêm linh kiện và tạo yêu cầu mua thành công!');
+                            $('#addSpareModal').modal('hide');
+                            $('#searchSpareID').val(null).trigger('change');
+                        } else {
+                            alert('❌ Có lỗi xảy ra khi tạo linh kiện.');
+                        }
+                    },
+                    error: function () {
+                        alert('❌ Lỗi kết nối server.');
+                    }
+                });
+            });
+
+
+            // --- 3️⃣ Hiển thị danh sách part ---
+            function renderPartTable() {
+                const tbody = $('#tblParts tbody');
+                tbody.empty();
+                partList.forEach((p, i) => {
+                    tbody.append(`
+                            <tr>
+                                <td>${i + 1}</td>
+                                <td>${p.SpareText.split(' - ')[0]}</td>
+                                <td>${p.SpareText.split(' - ')[1].split('(')[0]}</td>
+                                <td>${p.SpareText.includes('(') ? p.SpareText.split('(')[1].replace(')', '') : ''}</td>
+                                <td>${p.Qty}</td>
+                                   <td>${p.Note}</td>
+                                <td><button class="btn btn-sm btn-danger" onclick="removePart(${p.TempID})">Xóa</button></td>
+                            </tr>
+                        `);
+                });
+            }
+
+            // --- 4️⃣ Xóa part ---
+            window.removePart = function (id) {
+                partList = partList.filter(p => p.TempID !== id);
+                renderPartTable();
+            }
+
+      });
+    </script>
+}
+
+
+<script>
+    $('.select2-multi').select2(
+        {
+            multiple: true,
+            theme: 'bootstrap4',
+        });
+</script>
+
+
+
+<script>
+    function openAddPartModal() {
+        $("#modalTitle").text("Thêm linh kiện mới");
+        $("#modalBody").load("/Home/AddPartPartial?jigId=0", function () {
+            $("#modalAction").modal("show");
+        });
+    }
+
+    $(function () {
+        let docIndex = 0;
+
+        $("#btnAddDocument").on("click", function () {
+            $("#document-list").append(`
+            <div class="form-group mb-3 border p-3 rounded">
+                <input type="text" name="Documents[${docIndex}].DocType" class="form-control mb-2" placeholder="Tên tài liệu mới...">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="file" name="Documents[${docIndex}].File" class="form-control-file"" >
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="Documents[${docIndex}].Version" class="form-control" placeholder="Version">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="Documents[${docIndex}].Note" class="form-control" placeholder="Ghi chú">
+                    </div>
+                    <div class="col-md-1 text-right">
+                        <button type="button" class="btn btn-danger btn-sm remove-doc">X</button>
+                    </div>
+                </div>
+            </div>
+        `);
+            docIndex++;
+        });
+
+        $(document).on("click", ".remove-doc", function () {
+            $(this).closest(".form-group").remove();
+        });
+    });
+
+    function reindexDocuments() {
+        $("#document-list .doc-item").each(function (i, el) {
+            $(el).find("input").each(function () {
+                const name = $(this).attr("name");
+                if (name) {
+                    const newName = name.replace(/Documents\[\d+\]/, "Documents[" + i + "]");
+                    $(this).attr("name", newName);
+                }
+            });
+        });
+    }
+
+    // 🔹 Khi ấn Finish Wizard hoặc Submit Form
+    $("#example-form").on("submit", function (e) {
+        reindexDocuments();
+        // Có thể log ra để kiểm tra dữ liệu gửi đi
+        console.log("Form ready to submit!");
+    });
+
+
+    $(function () {
+        let drawingIndex = 0;
+        $("#btnAddDrawing").on("click", function () {
+
+            $("#drawing-list").append(`
+        <div class="form-group mb-3 border p-3 rounded">
+            <input type="text" name="Drawing[${drawingIndex}].DocType" class="form-control required mb-2" placeholder="Tên Bản vẽ...">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="file" name="Drawing[${drawingIndex}].File" class="form-control-file" >
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="Drawing[${drawingIndex}].Version" class="form-control required" placeholder="Version">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="Drawing[${drawingIndex}].Note" class="form-control" placeholder="Ghi chú">
+                </div>
+                <div class="col-md-1 text-right">
+                    <button type="button" class="btn btn-danger btn-sm remove-drawing">X</button>
+                </div>
+            </div>
+        </div>
+    `);
+            drawingIndex++;
+        });
+
+        // Gắn sự kiện xóa cho các dòng mới
+        $(document).on("click", ".remove-drawing", function () {
+            $(this).closest(".form-group").remove();
+        });
+    });
+
+    function reindexDrawing() {
+        $("#drawing-list .doc-item").each(function (i, el) {
+            $(el).find("input").each(function () {
+                const name = $(this).attr("name");
+                if (name) {
+                    const newName = name.replace(/Drawing\[\d+\]/, "Drawing[" + i + "]");
+                    $(this).attr("name", newName);
+                }
+            });
+        });
+    }
+
+    // 🔹 Khi ấn Finish Wizard hoặc Submit Form
+    $("#example-form").on("submit", function (e) {
+        reindexDrawing();
+        // Có thể log ra để kiểm tra dữ liệu gửi đi
+        console.log("Form ready to submit!");
+    });
+
+
+    $(function () {
+        let requestIndex = 0;
+        $("#btnAddrequest").on("click", function () {
+
+            $("#request-list").append(`
+            <div class="form-group mb-3 border p-3 rounded">
+            <div class="row">
+               <div class="col-md-10">
+                   <input type="text" name="Request[${requestIndex}].Title" class="form-control mb-2" placeholder="Nhập yêu cầu, ghi chú khi sửa chữa, bảo dưỡng ....">
+               </div>
+          <div class="col-md-2">
+              <button type="button" class="btn btn-danger btn-sm remove-request">X</button>
+          </div>
+          </div>
+         </div>
+        `);
+            requestIndex++;
+        });
+
+        // Gắn sự kiện xóa cho các dòng mới
+        $(document).on("click", ".remove-request", function () {
+            $(this).closest(".form-group").remove();
+        });
+    });
+
+    console.log('jQuery:', $.fn.jquery, 'select2:', typeof $.fn.select2);
+
+</script>
+
+
+
+
+<script>// 6️⃣ Mở modal thêm linh kiện mới
+   
+</script>

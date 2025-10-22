@@ -1,0 +1,47 @@
+﻿
+@model Jig_system_control.Models.Jig
+
+<form id="formEditInfo">
+    <input type="hidden" name="JigID" value="@Model.JigID" />
+
+    <div class="form-group">
+        <label>Tên Jig</label>
+        <input type="text" name="JigName" class="form-control" value="@Model.JigName" required />
+    </div>
+
+    <div class="form-group">
+        <label>Model</label>
+        <input type="text" name="Model" class="form-control" value="@Model.Model" />
+    </div>
+
+    <div class="form-group">
+        <label>Type</label>
+        <input type="text" name="Type" class="form-control" value="@Model.Type" />
+    </div>
+
+    <div class="form-group">
+        <label>Range</label>
+        <input type="text" name="Range" class="form-control" value="@Model.Range" />
+    </div>
+
+    <div class="form-group">
+        <label>Ghi chú</label>
+        <textarea name="Note" class="form-control">@Model.Note</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">💾 Cập nhật</button>
+</form>
+
+<script>
+$("#formEditInfo").submit(function (e) {
+    e.preventDefault();
+    $.post("/Home/EditInfo", $(this).serialize(), function (res) {
+        if (res.success) {
+            $("#modalAction").modal("hide");
+            location.reload(); // hoặc refresh phần table info
+        } else {
+            alert(res.message);
+        }
+    });
+});
+</script>

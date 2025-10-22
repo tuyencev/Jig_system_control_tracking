@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AfterLogin.cshtml";
+}
+
+<link href="~/css/toastr.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/select2.css">
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h3>Jig Tracking Dashboard</h3>
+
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center border-primary">
+            <div class="card-body">
+                <h5>Jig Cần Repair</h5>
+                <h2 id="reqCount">@ViewBag.reqCount</h2>
+                <button class="btn btn-sm btn-outline-primary view-more" data-tab="repair">View more</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center border-success">
+            <div class="card-body">
+                <h5>Jig Cần Maintenance</h5>
+                <h2 id="approveCount"> @ViewBag.approveCount</h2>
+                <button class="btn btn-sm btn-outline-success view-more" data-tab="maintenance">View more</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center border-warning">
+            <div class="card-body">
+                <h5>Request Document</h5>
+                <h2 id="importCount">@ViewBag.requestDoc</h2>
+                <button class="btn btn-sm btn-outline-warning view-more" data-tab="document">View more</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center border-danger">
+            <div class="card-body">
+                <h5>
+                    Request Design
+                </h5>
+                <h2 id="exportCount">@ViewBag.RequestDesign</h2>
+                <button class="btn btn-sm btn-outline-danger view-more" data-tab="design">View more</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <button class="btn btn-danger" onclick="$('#modalRepairJig').modal('show')">
+        <i class="fe fe-plus"></i> Báo Jig hỏng
+    </button>
+    <button class="btn btn-warning" onclick="$('#modalAddSpare').modal('show')">
+        <i class="fe fe-plus"></i> Nhập phiếu Maintenance
+    </button>
+</div>
+
+<!-- Tabs -->
+<ul class="nav nav-tabs mb-3" id="TrackingTabs" role="tablist">
+    <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-repair">Repair</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-maintenance">Maintenance</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-document">Request Document</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-design">Request Design</a></li>
+</ul>
+
+
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="tab-repair">Repair</div>
+    <div class="tab-pane fade" id="tab-maintenance">Maintenance</div>
+    <div class="tab-pane fade" id="tab-document">Repair History</div>
+    <div class="tab-pane fade" id="tab-design">Maintenance History</div>
+</div>
+
+
+@section Scripts {
+
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/toastr.min.js"></script>
+    <script src='~/js/select2.min.js'></script>
+    <script>
+        $(document).ready(function () {
+            function loadTab(tabName, targetDiv) {
+                $.ajax({
+                    url: '/RepairMaintenance/LoadTabPartial',
+                    type: 'GET',
+                    data: { tab: tabName },
+                    beforeSend: function () {
+                        targetDiv.html("<div class='p-3 text-center text-muted'>Đang tải...</div>");
+                    },
+                    success: function (html) {
+                        targetDiv.html(html);
+                        targetDiv.data("loaded", true);
+                    },
+                    error: function () {
+                        targetDiv.html("<div class='text-danger p-3'>Lỗi tải dữ liệu tab.</div>");
+                    }
+                });
+            }
+
+            // Khi đổi tab
+            $('#TrackingTabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                let tabId = $(e.target).attr("href");  // ví dụ: #tab-request
+                let targetDiv = $(tabId);
+                let tabName = tabId.replace("#tab-", ""); // "request", "approve", ...
+
+                if (!targetDiv.data("loaded")) {
+                    loadTab(tabName, targetDiv);
+                }
+            });
+
+            // Khi click vào nút "View more"
+            $(".view-more").click(function () {
+                let tab = $(this).data("tab");
+                $('#TrackingTabs a[href="#tab-' + tab + '"]').tab('show');
+            });
+
+            // 🔹 Tự động mở tab "request" và load dữ liệu khi trang vừa load
+            let firstTab = $('#TrackingTabs a[href="#tab-repair"]');
+            firstTab.tab('show');
+
+            let firstDiv = $('#tab-repair');
+            if (!firstDiv.data("loaded")) {
+                loadTab("repair", firstDiv);
+            }
+            $('#btnRepair').on('click', function () {
+                window.location.href = '/RepairMaintenance/RepairDetail?id=0';
+            });
+             
+        });
+    </script>
+}
+
+
+

@@ -1,0 +1,50 @@
+﻿
+@model Jig_system_control.Models.JigDrawing
+
+<form id="formAddDraw" enctype="multipart/form-data">
+    <input type="hidden" name="JigID" value="@ViewBag.JigID" />
+
+    <div class="form-group">
+        <label>Tên bản vẽ</label>
+        <input type="text" name="DocType" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>File</label>
+        <input type="file" name="File" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Version</label>
+        <input type="text" name="Version" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Ghi chú</label>
+        <textarea name="Note" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">💾 Lưu</button>
+</form>
+
+<script>
+$("#formAddDraw").submit(function (e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    $.ajax({
+        url: '/Home/AddDrawing',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            if (res.success) {
+                $("#modalAction").modal("hide");
+                $("#drawTable").append(res.html);
+            } else {
+                alert(res.message);
+            }
+        }
+    });
+});
+</script>

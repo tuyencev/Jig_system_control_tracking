@@ -1,0 +1,132 @@
+﻿
+<div class="modal fade" id="modalRequest" tabindex="-1" role="dialog" aria-labelledby="modalRequestLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalRequestLabel">Tạo phiếu Request linh kiện</h5>
+                <button type="button" class="close text-white" data-bs-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmRequest">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label>Người yêu cầu</label>
+                            <input type="text" name="CreatedBy" class="form-control" value="@User.Identity.Name" readonly />
+                        </div>
+                        <div class="col-md-4">
+                            <label>Ngày yêu cầu</label>
+                            <input type="date" name="CreatedDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        </div>
+             
+                        <div class="col-md-4">
+                            <label>Ghi chú</label>
+                            <input type="text" name="Remark" class="form-control" placeholder="Ghi chú..." />
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="mb-3">
+                        <label>Tìm kiếm linh kiện</label>
+                        <select id="spareSearch" class="form-control" style="width:100%;"></select>
+                    </div>
+
+                    <table class="table table-bordered" id="tblRequestDetails">
+                        <thead>
+                            <tr class="table-success">
+                                <th>ID</th>
+                                <th>Mã linh kiện</th>
+                                <th>Tên</th>
+                                <th>Model</th>
+                                <th>Maker</th>
+                                <th>Đơn vị</th>
+                                <th>Số lượng yêu cầu</th>
+                                <th>Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnSaveRequest">Lưu yêu cầu</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        // Select2 để tìm linh kiện
+        $('#spareSearch').select2({
+            placeholder: "Tìm linh kiện...",
+            ajax: {
+                url: '/Home/SearchSparePart',
+                dataType: 'json',
+                delay: 250,
+                data: params => ({ term: params.term }),
+                processResults: data => ({
+                    results: data.map(x => ({
+                        id: x.SpareID,
+                        text: x.Code + " - " + x.Name,
+                        model: x.Model,
+                        maker: x.Maker,
+                        unit: x.Unit
+                    }))
+                })
+            },
+            minimumInputLength: 2
+        });
+
+
+        // Khi chọn linh kiện thì thêm dòng vào bảng
+        $('#spareSearch').on('select2:select', function (e) {
+            let d = e.params.data;
+            let row = `
+                <tr>
+                   <td>${d.id}</td>
+                    <td>${d.text.split(" - ")[0]}</td>
+                    <td>${d.text.split(" - ")[1]}</td>
+                    <td>${d.model}</td>
+                    <td>${d.maker}</td>
+                    <td>${d.unit}</td>
+                    <td><input type="number" name="QtyRequested" class="form-control" min="1" value="1" /></td>
+                    <td><button class="btn btn-sm btn-danger btnRemove"><i class="fa fa-trash"></i>Xoá</button></td>
+                </tr>`;
+            $('#tblRequestDetails tbody').append(row);
+        });
+
+        // Xóa dòng
+        $(document).on('click', '.btnRemove', function () {
+            $(this).closest('tr').remove();
+        });
+
+        // Lưu request
+        $('#btnSaveRequest').click(function () {
+            let data = [];
+            $('#tblRequestDetails tbody tr').each(function () {
+                data.push({
+                    SpareID: $(this).find('td:eq(0)').text(),
+                    Qty: $(this).find('input[name=QtyRequested]').val()
+                });
+            });
+
+            $.ajax({
+                url: '/SparePart/CreateRequest',
+                type: 'POST',
+                data: {
+                    Remark: $('[name=Remark]').val(),
+                    Details: JSON.stringify(data)
+                },
+                success: function (res) {
+                    toastr.success('Tạo phiếu yêu cầu thành công');
+                    $('#modalRequest').modal('hide');
+                },
+                error: function () {
+                    toastr.error('Lỗi khi lưu phiếu yêu cầu');
+                }
+            });
+        });
+    });
+</script>
